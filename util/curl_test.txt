@@ -1,0 +1,17 @@
+
+get list of movie
+curl http://localhost:8080/api/movie/v1/list -verbose
+
+get seats
+curl -d "abc" -H "content-type: application/json" http://localhost:8081/api/movie/v1/seats -v
+
+
+confirm booking
+curl --request POST -H "content-type: application/json"  -d '{"id": "eb833105-71f4-45a4-8ffa-f001baa98888"，"name": "Darren Ang", "email": "abc@abc.com","movieTime" : {"id": "eb833105-71f4-45a4-8ffa-f001baa9bcb7"}, "bookingSeat": [{"name": "A2"},{"name": "A3"}]}' -H "content-type: application/json" -H "request-hash: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJiMzlmYTQ5ZS03MGI3LTQzOTAtODcxOS0wYjNjYmQ4ODU3YjkiLCJleHAiOjE2MzEzODQ5NTQsImlhdCI6MTYzMTM4NDY1NH0.ur5smx-I77BzYJ_iNolU62F9vl7X548nulQM2sYacCW-31B4p51Ag8jeMzUMI-mo3vhOYNpqum4eoXToaXUwhw" http://localhost:8080/api/booking/v1/confirm -verbose
+
+check seat available
+curl  -H "content-type: application/json"  -d 'eb833105-71f4-45a4-8ffa-f001baa9bcb7' http://localhost:8080/api/movie/v1/seatstatus 
+curl  -H "content-type: application/json"  -d 'eb833105-71f4-45a4-8ffa-f001baa9bcb7' http://localhost:8080/api/movie/v1/seatstatus -v -H "request-hash: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhYTNkMWNjYi01MzU3LTQyYzYtYTIzOC0xMjNkMGFjZGYwOTkiLCJleHAiOjE2MzE0MjU3MTQsImlhdCI6MTYzMTQyNTQxNH0.e6yRg6s3V82w-qtFT2xTgFiVkRY-gnPOcjIGRqFhuGvZvtxmTwq7YB0t-oQBja_tHqi45wqGAesl9xeNk8RfUw"
+
+{"name": "Darren Ang", "email": "abc@abc.com","movieTime" : {"id": "eb833105-71f4-45a4-8ffa-f001baa9bcb7"}, "bookingSeat": [{"name": "A2"},{"name": "A3"}]}
+
