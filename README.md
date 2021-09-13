@@ -5,23 +5,24 @@ This is not a completed project.
 
 ## Outstanding work
 * move to RDBMS as this is transaction system
-* use vault solution for passowrd/jwt shared key (e.g. jboss vault)
+* use vault solution for password/jwt shared key (e.g. jboss vault)
 * remove in-build tomcat and host under middleware(e.g. jboss/websphere)
-* code clean up refactoring & unit testing
+* code clean up, refactoring & unit testing
 * security code scanning(e.g. sonarqube)
+
 
 
 ## Highlevel design 
 Spring Web application
     
-### Database 
+### Database (SQLITE)
 * Table for Admin setup (Movie, Movie_Time, Hall)
 * Transaction Table(Booking, Booking_Seat)
 * Booking.status 
 1. DRF - draft, when no seat is selected
 2. PEN - pending, after seat is selected but pending final submission
 3. COM - submitted
-* Scheduler is implemented to housekeep stalled booking(e.g. user leave after halfway of booking)
+* Scheduler is implemented to housekeep stalled bookings(e.g. user leave after halfway of booking)
 
 ### Security 
 * https shall be enabled to ensure channel encryption
@@ -35,15 +36,10 @@ Spring Web application
     
    
 ## Development & Deployment
-* compile and package with maven, with JDK 11 or above.
-* Sample run command
+* Compile and package with maven, with JDK 11 or above.
+* Package command
 ```sh
 mvn package 
-```
-    
-* Sample run command
-```sh
-java -jar ticketbackend-0.1.jar <variables>
 ```
     
 * A WebMvcConfigurerAdapter is included to made easy for development, developer can deploy the frontend reactjs app into ./web/ folder, tomcat will serve the html int he folder at root, e.g. http://localstho:8080/index.html
@@ -57,7 +53,7 @@ java -jar ticketbackend-0.1.jar --server.port=8080
 ```
 
 
-###Application variables
+### Application variables
 	    
 * spring.jpa.database-platform=com.hackit.sqlite.SQLDialect
 * spring.jpa.hibernate.ddl-auto=update 
@@ -73,7 +69,13 @@ java -jar ticketbackend-0.1.jar --server.port=8080
 * spring.jpa.show-sql=false
 * logging.level.com.hackit.controller.MovieController=DEBUG 
 * logging.level.com.hackit.controller.BookingController=DEBUG 
-* logging.level.com.hackit.scheduler.SeatHousekeeping=DEBUG 
+* logging.level.com.hackit.sc## Reference sourceheduler.SeatHousekeeping=DEBUG 
 * logging.level.com.hackit.util.SecurityHelper=DEBUG 
 
-   
+## Reference source 
+* https://spring.io/guides/gs/rest-service/
+* https://mobiarch.wordpress.com/2020/11/25/restful-web-service-using-spring-boot-and-vs-code/
+* https://fullstackdeveloper.guru/2020/05/01/how-to-integrate-sqlite-database-with-spring-boot/
+* https://medium.com/swlh/spring-boot-security-jwt-hello-world-example-b479e457664c
+
+
