@@ -15,7 +15,7 @@ This is not a completed project.
 ## Highlevel design 
 Spring Web application
     
-### Database 
+### Database (SQLITE)
 * Table for Admin setup (Movie, Movie_Time, Hall)
 * Transaction Table(Booking, Booking_Seat)
 * Booking.status 
@@ -69,7 +69,12 @@ java -jar ticketbackend-0.1.jar --server.port=8080
 * spring.jpa.show-sql=false
 * logging.level.com.hackit.controller.MovieController=DEBUG 
 * logging.level.com.hackit.controller.BookingController=DEBUG 
-* logging.level.com.hackit.scheduler.SeatHousekeeping=DEBUG 
+* logging.level.com.hackit.sc## Reference sourceheduler.SeatHousekeeping=DEBUG 
 * logging.level.com.hackit.util.SecurityHelper=DEBUG 
 
-   
+## Reference source 
+* https://spring.io/guides/gs/rest-service/
+* https://mobiarch.wordpress.com/2020/11/25/restful-web-service-using-spring-boot-and-vs-code/
+* https://fullstackdeveloper.guru/2020/05/01/how-to-integrate-sqlite-database-with-spring-boot/
+* https://medium.com/swlh/spring-boot-security-jwt-hello-world-example-b479e457664c
+
