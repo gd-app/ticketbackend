@@ -5,10 +5,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,8 +40,33 @@ public class BookingController {
 	public ResponseEntity<String> reserve(@RequestBody Booking b, @RequestHeader("request-hash") String jwt) {
         logger.debug("reserve called");
         logger.debug("JWT : "+jwt);
+        //validate request
+        if (!JWT_DISABLED && !securityHelper.validateToken(jwt)){
+            logger.info("securityHelper.validateToken failed ");
 
-        return ResponseEntity.ok().build();
+            return ResponseEntity.badRequest().build();
+        }
+        
+        if (!b.getIdInStr().equals(securityHelper.getBookingIdFromToken(jwt)) ){
+            logger.info("booking id & jwt not match, request rejected");
+            return ResponseEntity.badRequest().build();
+        }
+        try {
+            Boolean result = bookingService.ReserveBooking(b);
+            if (result){
+                String jwt_renewed = securityHelper.generateToken(b);
+                logger.debug("JWT renewed：jwt : "+jwt);
+                HttpHeaders responseHeaders = new HttpHeaders();
+                responseHeaders.set("request-hash", jwt_renewed);
+                return ResponseEntity.ok().headers(responseHeaders).build();
+		}
+            else return ResponseEntity.badRequest().build();
+        }
+        catch(Exception e){
+            logger.error("error when reserve booking", e);
+            return ResponseEntity.badRequest().build();
+        }
+        
     }
 
     @PostMapping("/purchase")
@@ -46,7 +75,7 @@ public class BookingController {
         logger.debug("purchase called");
         logger.debug("JWT : "+jwt);
         //validate request
-        if (JWT_DISABLED || !securityHelper.validateToken(jwt)){
+        if (!JWT_DISABLED &&  !securityHelper.validateToken(jwt)){
             logger.info("securityHelper.validateToken failed ");
 
             return ResponseEntity.badRequest().build();

@@ -77,16 +77,19 @@ public class BookingService {
         Optional<MovieTime> mt = MovieTimeRepo.findById(booking.getMovieTime().getId());
         List<String> seats = movieService.GetSeatStatus(booking.getMovieTime().getId());
         for (BookingSeat bs : booking.getBookingSeat()) {
-            if (Arrays.asList(seats).contains(bs.getName()))
-            {
-                throw new Exception("Seat Already taken by others : "+bs.getName()+", movieTime:"+mt.get().getId()); 
+            String curSeat = bs.getName();
+            for (String s : seats) {
+                if (s.equals(curSeat))
+                {
+                    throw new Exception("Seat Already taken by others : "+bs.getName()+", movieTime:"+mt.get().getId()); 
+                }
             }
         }
     }
 
     private void ValidateSeat(Booking booking) throws Exception {
         Optional<MovieTime> mt = MovieTimeRepo.findById(booking.getMovieTime().getId());
-        String[] seats =  mt.get().getHall().getLayout().replace("[","").replace("]","").split(",");
+        String[] seats =  mt.get().getHall().getLayout().replace("[","").replace("]","").replace("\"","").split(",");
         //validate seat id
         for (BookingSeat bs : booking.getBookingSeat()) {
             if (!Arrays.asList(seats).contains(bs.getName()))
@@ -99,7 +102,8 @@ public class BookingService {
     @Transactional
     public boolean PurchaseBooking(Booking booking)throws Exception{
         //Never Trust user Input, Check if Seat Id is valid
-        ValidateSeat(booking);
+        //to rethink how seat should be blocked and revalidated
+        //ValidateSeat(booking);
         
         //Never Trust user Input, Check if Status is Draft
         if (VerifyPendingBooking(booking.getId())==null){
@@ -107,19 +111,19 @@ public class BookingService {
         }
 
         //check seat availability from request
-        CheckSeatAvail(booking);
+        //CheckSeatAvail(booking);
 
         //submit
         Date curTime = new Date(System.currentTimeMillis());
-
+	
         booking.setStatus("COM");
         booking.setPurchasedOn(curTime);
         booking.setModifiedOn(curTime);
         bookingRepo.save(booking);
-        for (BookingSeat bs : booking.getBookingSeat()) {
-            bs.setBooking(booking);
-            bookingSeatRepo.save(bs);    
-        }
+        //for (BookingSeat bs : booking.getBookingSeat()) {
+        //    bs.setBooking(booking);
+        //    bookingSeatRepo.save(bs);    
+        //}
         
         return true;
 

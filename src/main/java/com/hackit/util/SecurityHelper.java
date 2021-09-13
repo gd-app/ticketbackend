@@ -14,6 +14,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.ExpiredJwtException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -29,7 +31,9 @@ public class SecurityHelper {
 
     @Value("${hackit.jwt.validity.seconds}")
     private Integer JWT_TOKEN_VALIDITY;
-
+	
+	Logger logger = LoggerFactory.getLogger(this.getClass());
+	
     //retrieve username from jwt token
 	public String getBookingIdFromToken(String token) {
 		return getClaimFromToken(token, Claims::getSubject);
@@ -68,12 +72,12 @@ public class SecurityHelper {
 		}	
 		catch (SignatureException e)
 		{
-			System.out.println("SignatureException");
+			logger.debug("SignatureException");
 			return false;
 		}
 		catch (ExpiredJwtException e)
 		{
-			System.out.println("ExpiredJwtException");
+			logger.debug("ExpiredJwtException");
 			return false;
 		}
 

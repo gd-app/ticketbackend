@@ -5,9 +5,9 @@
 /home/darren/projects/hackit/ticketbackend/src/main/java/com/hackit/modal/BookingSeat.java
 /home/darren/projects/hackit/ticketbackend/src/main/java/com/hackit/service/BookingService.java
 /home/darren/projects/hackit/ticketbackend/src/main/java/com/hackit/repository/MovieRepository.java
-/home/darren/projects/hackit/ticketbackend/src/main/java/com/hackit/repository/BookingSeatRepository.java
 /home/darren/projects/hackit/ticketbackend/src/main/java/com/hackit/modal/MovieTime.java
-/home/darren/projects/hackit/ticketbackend/src/main/java/com/hackit/ticketbackend/WebConfigurer.java
+/home/darren/projects/hackit/ticketbackend/src/main/java/com/hackit/util/WebConfigurer.java
+/home/darren/projects/hackit/ticketbackend/src/main/java/com/hackit/repository/BookingSeatRepository.java
 /home/darren/projects/hackit/ticketbackend/src/main/java/com/hackit/controller/MovieController.java
 /home/darren/projects/hackit/ticketbackend/src/main/java/com/hackit/scheduler/SeatHousekeeping.java
 /home/darren/projects/hackit/ticketbackend/src/main/java/com/hackit/repository/HallRepository.java

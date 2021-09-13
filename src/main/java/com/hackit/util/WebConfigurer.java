@@ -1,4 +1,4 @@
-package com.hackit.ticketbackend;
+package com.hackit.util;
 
 import java.io.File;
 

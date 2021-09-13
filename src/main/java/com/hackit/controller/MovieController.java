@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -36,7 +37,7 @@ public class MovieController {
     @GetMapping("/list")
 	@ResponseBody
 	public ResponseEntity<List<Movie>> list() {
-        logger.debug("List called, movieTimeId：");
+        logger.debug("List called");
         //get a list of movie that availble for booking
         //date & time is not considered in this implementation
         //movieService.CreateDummy();
@@ -46,32 +47,19 @@ public class MovieController {
         else return ResponseEntity.noContent().build();
 
     }
-    // @PostMapping("/seats")
-	// @ResponseBody
-	// public ResponseEntity<Hall> seats(@RequestBody String movieTimeid) {
-    //     //validate request
-    //     if (movieTimeid.isBlank())
-    //         return ResponseEntity.badRequest().build();
 
-    //     Booking b = bookingService.CreateDraftBooking();
-    //     System.out.println("bookign id "+b.getIdInStr());
-    //     String jwt = securityHelper.generateToken(b);
-    //     HttpHeaders responseHeaders = new HttpHeaders();
-    //     responseHeaders.set("request-hash", jwt);
-
-    //     System.out.println(jwt);
-    //     System.out.println("jwt："+securityHelper.getBookingIdFromToken(jwt));
-    //     System.out.println("expiry："+securityHelper.getExpirationDateFromToken(jwt).toString());
-    //     System.out.println("validate : "+securityHelper.validateToken(jwt).toString());
-    //     //create a draft booking
-    //     //get a list of seats
-        
-    //     System.out.println("movieTimeid received "+movieTimeid);
-    //     Hall h;
-    //     return ResponseEntity.ok().headers(responseHeaders).body(h);
-
-        
-    // }
+    @GetMapping("/dummy")
+    public ResponseEntity<String> dummy() {
+        logger.debug("dummy called");
+        try{
+            movieService.CreateDummy();
+            return ResponseEntity.ok().build();
+        }
+        catch(Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
+    
 
     @PostMapping("/seatstatus")
 	public ResponseEntity<List<String>> SeatStatus(@RequestBody String movieTimeId,@RequestHeader(value = "request-hash", required = false) String requestJWT) {
@@ -89,7 +77,7 @@ public class MovieController {
 
             UUID uMovieTimeId = UUID.fromString(movieTimeId);
             List<String> seats = movieService.GetSeatStatus(uMovieTimeId);
-            if (seats != null && seats.size()>0){
+            if (seats != null){
                 if (b == null || b.getId() == null){
                     logger.debug("create draft booking");
                     b = bookingService.CreateDraftBooking();
@@ -102,7 +90,7 @@ public class MovieController {
                 return ResponseEntity.ok().headers(responseHeaders).body(seats);
             } 
             else 
-                return ResponseEntity.noContent().build();
+                return ResponseEntity.badRequest().build();
         } catch (Exception e){
             logger.error("Error at SeatStatus", e);
             return ResponseEntity.badRequest().build();
